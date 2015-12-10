@@ -67,7 +67,6 @@ LineChart = React.createClass({
 	        .attr("transform", "translate(" + props.width + ",0)")
 	        .call(yAxis);
 
-
 	    var colors = d3.scale.category10();
 	    svg.selectAll('.line')
 	        .data([values, msft, ibm])
