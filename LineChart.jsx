@@ -6,9 +6,11 @@ LineChart = React.createClass({
 	var parse = d3.time.format("%b %Y").parse;
 
 	// Scales and axes. Note the inverted domain for the y-scale: bigger is up!
-	var x = d3.time.scale().range([0, width]),
+	var x = d3.scale.linear().range([0, width]),
 	    y = d3.scale.linear().range([height, 0]),
-	    xAxis = d3.svg.axis().scale(x).tickSize(-height).tickSubdivide(true),
+	    xAxis = d3.svg.axis().scale(x).tickSize(-height)
+		.tickSubdivide(true)
+		.tickFormat(d3.format("d")),
 	    yAxis = d3.svg.axis().scale(y).ticks(4).orient("right");
 
 	// An area generator, for the light fill.
