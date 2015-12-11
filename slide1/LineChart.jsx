@@ -149,7 +149,7 @@ LineChart = React.createClass({
 
 	    	    svg.append('line')
 	            .attr('stroke', 'rgb(0,0,0)')
-	            .attr('stroke-width', 1)
+	            .attr('stroke-width', 0.5)
 	            .attr('x1', 0)
 	            .attr('y1', 171)
 	            .attr('x2', 800)
@@ -193,7 +193,7 @@ LineChart = React.createClass({
 	    marginLeft: 80,
 	    marginRight: 80,
 	    marginTop: 40,
-	    marginBottom: 80
+	    marginBottom: 40
 	}
     },
 
