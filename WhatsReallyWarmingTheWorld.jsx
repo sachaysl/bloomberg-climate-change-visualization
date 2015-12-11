@@ -1,16 +1,15 @@
 WhatsReallyWarmingTheWorld = React.createClass({
 
-    divStyle: {
+    headStyle: {
 	color: 'black',
 	fontSize: '30px',
-	marginLeft: '200px'
 	    },
 
     render: function() {
 
 	return (
 
-	    <h1 style= {this.divStyle}> What's Really Warming the World? </h1>
+	    <h1 style= {this.headStyle}> What's Really Warming the World? </h1>
 );
 
 }

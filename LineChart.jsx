@@ -45,7 +45,7 @@ LineChart = React.createClass({
 	  
 	    // Compute the minimum and maximum date, and the maximum price.
 	x.domain([values[0].year, values[values.length - 1].year]);
-	y.domain([-2, 2]);
+	y.domain([-1, 1]);
 
 	    // Add an SVG element with the desired dimensions and margin.
 	    var svg = d3.select("svg")
@@ -192,7 +192,7 @@ LineChart = React.createClass({
 	    height: 340,
 	    marginLeft: 80,
 	    marginRight: 80,
-	    marginTop: 80,
+	    marginTop: 40,
 	    marginBottom: 80
 	}
     },
