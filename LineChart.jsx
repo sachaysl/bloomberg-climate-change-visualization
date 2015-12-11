@@ -70,7 +70,26 @@ LineChart = React.createClass({
 	        .attr("class", "y axis")
 	        .attr("transform", "translate(" + props.width + ",0)")
 	        .call(yAxis);
-//Why is this line not showing up???????
+
+	// Add an x-axis label.
+		svg.append("text")
+	        .attr("class", "x label")
+	        .attr("text-anchor", "end")
+	        .attr("x", width/2)
+	        .attr("y", 370)
+	        .text("Year");
+
+	    // Add a y-axis label.
+	    svg.append("text")
+	        .attr("class", "y label")
+	        .attr("text-anchor", "end")
+		.attr("x", -40)
+	        .attr("y", 850)
+	        .attr("dy", ".75em")
+	        .attr("transform", "rotate(-90)")
+	        .text("Cumulative change in annual mean temperature (Celcius)");
+
+	    
 
 	    var colors = d3.scale.category10();
 	    svg.selectAll('.line')
@@ -132,10 +151,10 @@ LineChart = React.createClass({
 	            .attr('stroke', 'rgb(0,0,0)')
 	            .attr('stroke-width', 1)
 	            .attr('x1', 0)
-	            .attr('y1', 170)
+	            .attr('y1', 171)
 	            .attr('x2', 800)
-	            .attr('y2', 170);
-
+	            .attr('y2', 171);
+	    
 
 	    
 	}); 
@@ -143,7 +162,7 @@ LineChart = React.createClass({
 	// Parse years and means. We assume years are sorted.
 	function type(d) {
 	    d.year = parseInt(d.year);
-	    d.annualMean = +d.annualMean;
+	    d.annualMean = +d.annualMean + 0.23;
 	    return d;
 	}
 
