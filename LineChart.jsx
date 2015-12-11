@@ -14,34 +14,36 @@ LineChart = React.createClass({
 	// An area generator, for the light fill.
 	var area = d3.svg.area()
 		.interpolate("monotone")
-		.x(function(d) { return x(d.date); })
+		.x(function(d) { return x(d.year); })
 		.y0(height)
-		.y1(function(d) { return y(d.price); });
+		.y1(function(d) { return y(d.annualMean); });
 
 	// A line generator, for the dark stroke.
 	var line = d3.svg.line()
 		.interpolate("monotone")
-		.x(function(d) { return x(d.date); })
-		.y(function(d) { return y(d.price); });
+		.x(function(d) { return x(d.year); })
+		.y(function(d) { return y(d.annualMean); });
 
-	d3.csv("data/readme.csv", type, function(error, data) {
+	d3.csv("data/observed.csv", type, function(error, data) {
 
 	    // Filter to one symbol; the S&P 500.
-	    var values = data.filter(function(d) {
-		return d.symbol == "AMZN";;
-	    });
+	  //  var values = data.filter(function(d) {
+	//	return d.symbol == "AMZN";;
+	  //  });
 
-	    var msft = data.filter(function(d) {
-		return d.symbol == "MSFT";
-	    });
+	 //   var msft = data.filter(function(d) {
+	//	return d.symbol == "MSFT";
+	 //   });
 
-	    var ibm = data.filter(function(d) {
-		return d.symbol == 'IBM';
-	    });
-
+	 //   var ibm = data.filter(function(d) {
+	    //	return d.symbol == 'IBM';
+              
+            var values = data;
+	    
+	  
 	    // Compute the minimum and maximum date, and the maximum price.
-	    x.domain([values[0].date, values[values.length - 1].date]);
-	    y.domain([0, d3.max(values, function(d) { return d.price; })]).nice();
+	x.domain([values[0].year, values[values.length - 1].year]);
+	y.domain([-2, 2]);
 
 	    // Add an SVG element with the desired dimensions and margin.
 	    var svg = d3.select("svg")
@@ -66,10 +68,11 @@ LineChart = React.createClass({
 	        .attr("class", "y axis")
 	        .attr("transform", "translate(" + props.width + ",0)")
 	        .call(yAxis);
+//Why is this line not showing up???????
 
 	    var colors = d3.scale.category10();
 	    svg.selectAll('.line')
-	        .data([values, msft, ibm])
+	        .data([values])
 	        .enter()
 	        .append('path')
 	        .attr('class', 'line')
@@ -99,7 +102,7 @@ LineChart = React.createClass({
 	            .attr('x1', 1)
 	            .attr('y1', 1)
 	            .attr('x2', 1)
-	            .attr('y2', props.height)
+	            .attr('y2', props.height);
 
 	    /* Create a shared transition for anything we're animating */
 	    var t = svg.transition()
@@ -110,29 +113,37 @@ LineChart = React.createClass({
 			d3.select('line.guide')
 			    .transition()
 			    .style('opacity', 0)
-			    .remove()
+			    .remove();
 		    });
 
 	    t.select('rect.curtain')
 	        .attr('width', 0);
 	    t.select('line.guide')
-	        .attr('transform', 'translate(' + props.width + ', 0)')
+	        .attr('transform', 'translate(' + props.width + ', 0)');
 
-	    d3.select("#show_guideline").on("change", function(e) {
-		guideline.attr('stroke-width', this.checked ? 1 : 0);
-		curtain.attr("opacity", this.checked ? 0.75 : 1);
-	    })
+	//    d3.select("#show_guideline").on("change", function(e) {
+	//	guideline.attr('stroke-width', this.checked ? 1 : 0);
+	//	curtain.attr("opacity", this.checked ? 0.75 : 1);
+	    //  })
 
-	});
+	    	    svg.append('line')
+	            .attr('stroke', 'rgb(0,0,0)')
+	            .attr('stroke-width', 1)
+	            .attr('x1', 0)
+	            .attr('y1', 170)
+	            .attr('x2', 800)
+	            .attr('y2', 170);
 
-	// Parse dates and numbers. We assume values are sorted by date.
+
+	    
+	}); 
+
+	// Parse years and means. We assume years are sorted.
 	function type(d) {
-	    d.date = parse(d.date);
-	    d.price = +d.price;
+	    d.year = parseInt(d.year);
+	    d.annualMean = +d.annualMean;
 	    return d;
 	}
-	
-
 
     },
     
