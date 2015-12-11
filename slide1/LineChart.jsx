@@ -76,18 +76,20 @@ LineChart = React.createClass({
 	        .attr("class", "x label")
 	        .attr("text-anchor", "end")
 	        .attr("x", width/2)
-	        .attr("y", 370)
-	        .text("Year");
+	        .attr("y", 380)
+	        .text("Year")
+		.style("font-size", "11px");
 
 	    // Add a y-axis label.
 	    svg.append("text")
 	        .attr("class", "y label")
 	        .attr("text-anchor", "end")
-		.attr("x", -20)
+		.attr("x", 0)
 	        .attr("y", 850)
 	        .attr("dy", ".75em")
 	        .attr("transform", "rotate(-90)")
-	        .text("Cumulative change in annual mean temperature (Celsius) since 1880");
+	        .text("Cumulative change in annual mean temperature (°C) since 1880")
+		.style("font-size", "11px");
 
 	    
 
