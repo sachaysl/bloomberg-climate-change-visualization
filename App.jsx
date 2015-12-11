@@ -2,8 +2,10 @@ App = React.createClass({
 
     render: function() {
 	return (
-	    <LineChart />
-
+	    <div>
+	      <WhatsReallyWarmingTheWorld />
+	      <LineChart />
+	    </div>
 	);
     }
 });
