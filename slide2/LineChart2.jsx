@@ -94,18 +94,6 @@ LineChart2 = React.createClass({
 	    
 
 	    var colors = d3.scale.category10();
-	    svg.selectAll('.line')
-	        .data([values])
-	        .enter()
-	        .append('path')
-	        .attr('class', 'line')
-	        .style('stroke', function(d) {
-		    return colors(Math.random() * 50);
-		})
-	        .attr('clip-path', 'url(#clip)')
-	        .attr('d', function(d) {
-		    return line(d);
-		})
 
 	    /* Add 'curtain' rectangle to hide entire graph */
 	    var curtain = svg.append('rect')
@@ -149,6 +137,19 @@ LineChart2 = React.createClass({
 	//	curtain.attr("opacity", this.checked ? 0.75 : 1);
 	    //  })
 
+	    svg.selectAll('.line')
+	        .data([values])
+	        .enter()
+	        .append('path')
+	        .attr('class', 'line')
+	        .style('stroke', function(d) {
+		    return colors(Math.random() * 50);
+		})
+	        .attr('clip-path', 'url(#clip)')
+	        .attr('d', function(d) {
+		    return line(d);
+		});
+
 	    	    svg.append('line')
 	            .attr('stroke', 'rgb(0,0,0)')
 	            .attr('stroke-width', 0.5)
@@ -156,8 +157,6 @@ LineChart2 = React.createClass({
 	            .attr('y1', 171)
 	            .attr('x2', 800)
 	            .attr('y2', 171);
-	    
-
 	    
 	}); 
 
