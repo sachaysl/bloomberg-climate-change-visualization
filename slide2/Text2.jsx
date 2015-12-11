@@ -1,4 +1,4 @@
-Text1 = React.createClass({
+Text2 = React.createClass({
 
     h3Style: {
 	color: 'grey',

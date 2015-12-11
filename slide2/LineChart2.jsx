@@ -1,4 +1,4 @@
-LineChart = React.createClass({
+LineChart2 = React.createClass({
 
     updateChart: function(props) {
 	var height = props.height;
