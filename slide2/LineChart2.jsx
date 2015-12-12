@@ -21,12 +21,20 @@ LineChart2 = React.createClass({
 		.y1(function(d) { return y(d.annualMean); });
 
 	// A line generator, for the dark stroke.
+
 	var line = d3.svg.line()
 		.interpolate("monotone")
 		.x(function(d) { return x(d.year); })
 		.y(function(d) { return y(d.annualMean); });
 
-	d3.csv("data/observed.csv", type, function(error, data) {
+	var line2 = d3.svg.line()
+		.interpolate("monotone")
+		.x(function(d) { return x(d.year); })
+		.y(function(d) { return y(d.orbitalChanges); });
+
+
+	d3.csv("data/observed.csv", type, function(data) {
+	    d3.csv("data/forcings.csv",type2, function(data2) {
 
 	    // Filter to one symbol; the S&P 500.
 	  //  var values = data.filter(function(d) {
@@ -40,7 +48,8 @@ LineChart2 = React.createClass({
 	 //   var ibm = data.filter(function(d) {
 	    //	return d.symbol == 'IBM';
               
-            var values = data;
+		var values = data;
+		var values2 = data2;
 	    
 	  
 	    // Compute the minimum and maximum date, and the maximum price.
@@ -89,11 +98,33 @@ LineChart2 = React.createClass({
 	        .attr("dy", ".75em")
 	        .attr("transform", "rotate(-90)")
 	        .text("Cumulative change in annual mean temperature (°C) since 1880")
-		.style("font-size", "11px");
+		    .style("font-size", "11px");
 
-	    
+		var colors = d3.scale.category10();
+//
+		svg.selectAll('.line')
+	        .data([values2])
+	        .enter()
+	        .append('path')
+	        .attr('class', 'line')
+	        .style('stroke', function(d) {
+		    return colors(Math.random() * 50);
+		})
+	        .attr('clip-path', 'url(#clip)')
+	        .attr('d', function(d) {
+		    return line2(d);
+		});
+		
+	    //placeholder for orbitalChanges forcing
+	     //    svg.append('line')
+	       //     .attr('stroke', 'rgb(0,0,0)')
+	      //      .attr('stroke-width', 0.5)
+	      //      .attr('x1', 0)
+	      //      .attr('y1', 200)
+	      //      .attr('x2', 800)
+	      //      .attr('y2', 200);
+	    //end of placeholder
 
-	    var colors = d3.scale.category10();
 
 	    /* Add 'curtain' rectangle to hide entire graph */
 	    var curtain = svg.append('rect')
@@ -137,7 +168,7 @@ LineChart2 = React.createClass({
 	//	curtain.attr("opacity", this.checked ? 0.75 : 1);
 	    //  })
 
-	    svg.selectAll('.line')
+	    svg.selectAll('.line2')
 	        .data([values])
 	        .enter()
 	        .append('path')
@@ -158,16 +189,32 @@ LineChart2 = React.createClass({
 	            .attr('x2', 800)
 	            .attr('y2', 171);
 	    
-	}); 
+	    });
+	});
 
 	// Parse years and means. We assume years are sorted.
 	function type(d) {
 	    d.year = parseInt(d.year);
 	    d.annualMean = +d.annualMean + 0.23;
+	    d.orbitalChanges = +d.orbitalChanges - 287.50310744057606;
 	    return d;
 	}
 
+	// Kelvin To Celsius
+	function kToC(t){
+	    // 272.15K = 1 C
+	    return (t -272.15);
+	}
+
+	function type2(d) {
+	    d.year = parseInt(d.year);
+	    d.orbitalChanges = kToC(+d.orbitalChanges) - kToC(287.50310744057606);
+	    return d;
+	}
+
+	    
     },
+    
     
 
     componentDidMount: function() {

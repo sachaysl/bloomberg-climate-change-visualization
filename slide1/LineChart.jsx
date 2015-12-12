@@ -14,11 +14,11 @@ LineChart = React.createClass({
 	    yAxis = d3.svg.axis().scale(y).ticks(4).orient("right");
 
 	// An area generator, for the light fill.
-	var area = d3.svg.area()
-		.interpolate("monotone")
-		.x(function(d) { return x(d.year); })
-		.y0(height)
-		.y1(function(d) { return y(d.annualMean); });
+//	var area = d3.svg.area()
+//		.interpolate("monotone")
+//		.x(function(d) { return x(d.year); })
+//		.y0(height)
+//		.y1(function(d) { return y(d.annualMean); });
 
 	// A line generator, for the dark stroke.
 	var line = d3.svg.line()
@@ -43,7 +43,7 @@ LineChart = React.createClass({
             var values = data;
 	    
 	  
-	    // Compute the minimum and maximum date, and the maximum price.
+
 	x.domain([values[0].year, values[values.length - 1].year]);
 	y.domain([-1, 1]);
 
@@ -91,9 +91,10 @@ LineChart = React.createClass({
 	        .text("Cumulative change in annual mean temperature (°C) since 1880")
 		.style("font-size", "11px");
 
-	    
-
 	    var colors = d3.scale.category10();
+
+	    // Add the clip path.
+
 	    svg.selectAll('.line')
 	        .data([values])
 	        .enter()
@@ -104,7 +105,7 @@ LineChart = React.createClass({
 		})
 	        .attr('clip-path', 'url(#clip)')
 	        .attr('d', function(d) {
-		    return line(d);
+		    return line(d); //this is where we interpolate
 		})
 
 	    /* Add 'curtain' rectangle to hide entire graph */
@@ -165,6 +166,7 @@ LineChart = React.createClass({
 	function type(d) {
 	    d.year = parseInt(d.year);
 	    d.annualMean = +d.annualMean + 0.23;
+	    d.orbitalChanges = +d.orbitalChanges - 287.50310744057606;
 	    return d;
 	}
 
