@@ -101,6 +101,9 @@ LineChart2 = React.createClass({
 		    .style("font-size", "11px");
 
 		var colors = d3.scale.category10();
+		var domain = ["observed","orbital"];
+		colors.domain(domain);
+		
 //
 		svg.selectAll('.line')
 	        .data([values2])
@@ -108,7 +111,7 @@ LineChart2 = React.createClass({
 	        .append('path')
 	        .attr('class', 'line')
 	        .style('stroke', function(d) {
-		    return colors(Math.random() * 50);
+		    return colors("orbital");
 		})
 	        .attr('clip-path', 'url(#clip)')
 	        .attr('d', function(d) {
@@ -134,7 +137,7 @@ LineChart2 = React.createClass({
 	            .attr('width', props.width)
 	            .attr('class', 'curtain')
 	            .attr('transform', 'rotate(180)')
-	            .style('fill', '#ffffff')
+	            .style('fill', '#ffffff');
 
 	    /* Optionally add a guideline */
 	    var guideline = svg.append('line')
@@ -174,7 +177,7 @@ LineChart2 = React.createClass({
 	        .append('path')
 	        .attr('class', 'line')
 	        .style('stroke', function(d) {
-		    return colors(Math.random() * 50);
+		    return colors("observed");
 		})
 	        .attr('clip-path', 'url(#clip)')
 	        .attr('d', function(d) {
@@ -203,7 +206,7 @@ LineChart2 = React.createClass({
 	// Kelvin To Celsius
 	function kToC(t){
 	    // 272.15K = 1 C
-	    return (t -272.15);
+	    return (t - 272.15);
 	}
 
 	function type2(d) {
