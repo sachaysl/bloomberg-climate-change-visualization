@@ -1,4 +1,4 @@
-LineChart = React.createClass({
+LineChart3 = React.createClass({
 
     updateChart: function(props) {
 	var height = props.height;
@@ -14,19 +14,27 @@ LineChart = React.createClass({
 	    yAxis = d3.svg.axis().scale(y).ticks(4).orient("right");
 
 	// An area generator, for the light fill.
-//	var area = d3.svg.area()
-//		.interpolate("monotone")
-//		.x(function(d) { return x(d.year); })
-//		.y0(height)
-//		.y1(function(d) { return y(d.annualMean); });
+	var area = d3.svg.area()
+		.interpolate("monotone")
+		.x(function(d) { return x(d.year); })
+		.y0(height)
+		.y1(function(d) { return y(d.annualMean); });
 
 	// A line generator, for the dark stroke.
+
 	var line = d3.svg.line()
 		.interpolate("monotone")
 		.x(function(d) { return x(d.year); })
 		.y(function(d) { return y(d.annualMean); });
 
-	d3.csv("data/observed.csv", type, function(error, data) {
+	var line2 = d3.svg.line()
+		.interpolate("monotone")
+		.x(function(d) { return x(d.year); })
+		.y(function(d) { return y(d.orbitalChanges); });
+
+
+	d3.csv("data/observed.csv", type, function(data) {
+	    d3.csv("data/forcings.csv",type2, function(data2) {
 
 	    // Filter to one symbol; the S&P 500.
 	  //  var values = data.filter(function(d) {
@@ -40,10 +48,11 @@ LineChart = React.createClass({
 	 //   var ibm = data.filter(function(d) {
 	    //	return d.symbol == 'IBM';
               
-            var values = data;
+		var values = data;
+		var values2 = data2;
 	    
 	  
-
+	    // Compute the minimum and maximum date, and the maximum price.
 	x.domain([values[0].year, values[values.length - 1].year]);
 	y.domain([-1, 1]);
 
@@ -89,24 +98,38 @@ LineChart = React.createClass({
 	        .attr("dy", ".75em")
 	        .attr("transform", "rotate(-90)")
 	        .text("Cumulative change in annual mean temperature (°C) since 1880")
-		.style("font-size", "11px");
+		    .style("font-size", "11px");
 
-	    var colors = d3.scale.category10();
-
-	    // Add the clip path.
-
-	    svg.selectAll('.line')
-	        .data([values])
+		var colors = d3.scale.category10();
+		var domain = ["observed","solar","greenhouse","volcanic","aerosol","land",
+			      "ozone","human","all","orbital"
+			      ];
+		colors.domain(domain);
+		
+//
+		svg.selectAll('.line')
+	        .data([values2])
 	        .enter()
 	        .append('path')
 	        .attr('class', 'line')
 	        .style('stroke', function(d) {
-		    return colors(Math.random() * 50);
+		    return colors("solar");
 		})
 	        .attr('clip-path', 'url(#clip)')
 	        .attr('d', function(d) {
-		    return line(d); //this is where we interpolate
-		})
+		    return line2(d);
+		});
+		
+	    //placeholder for orbitalChanges forcing
+	     //    svg.append('line')
+	       //     .attr('stroke', 'rgb(0,0,0)')
+	      //      .attr('stroke-width', 0.5)
+	      //      .attr('x1', 0)
+	      //      .attr('y1', 200)
+	      //      .attr('x2', 800)
+	      //      .attr('y2', 200);
+	    //end of placeholder
+
 
 	    /* Add 'curtain' rectangle to hide entire graph */
 	    var curtain = svg.append('rect')
@@ -116,7 +139,7 @@ LineChart = React.createClass({
 	            .attr('width', props.width)
 	            .attr('class', 'curtain')
 	            .attr('transform', 'rotate(180)')
-	            .style('fill', '#ffffff')
+	            .style('fill', '#ffffff');
 
 	    /* Optionally add a guideline */
 	    var guideline = svg.append('line')
@@ -145,31 +168,59 @@ LineChart = React.createClass({
 	    t.select('line.guide')
 	        .attr('transform', 'translate(' + props.width + ', 0)');
 
+	//    d3.select("#show_guideline").on("change", function(e) {
+	//	guideline.attr('stroke-width', this.checked ? 1 : 0);
+	//	curtain.attr("opacity", this.checked ? 0.75 : 1);
+	    //  })
 
-	    svg.append('line')
-		.attr('stroke', 'rgb(0,0,0)')
-	        .attr('stroke-width', 0.5)
-	        .attr('x1', 0)
-	        .attr('y1', 171)
-	        .attr('x2', 800)
-		.attr('y2', 171);
+	    svg.selectAll('.line2')
+	        .data([values])
+	        .enter()
+	        .append('path')
+	        .attr('class', 'line')
+	        .style('stroke', function(d) {
+		    return colors("observed");
+		})
+	        .attr('clip-path', 'url(#clip)')
+	        .attr('d', function(d) {
+		    return line(d);
+		});
 
-	    svg.append("rect")
-		.attr("x", 0)
-		.attr("y", 0)
-		.attr("width", 20)
-		.attr("height", 20)
-		.style("fill", "#1f77b4");
+	    	    svg.append('line')
+	            .attr('stroke', 'rgb(0,0,0)')
+	            .attr('stroke-width', 0.5)
+	            .attr('x1', 0)
+	            .attr('y1', 171)
+	            .attr('x2', 800)
+	            .attr('y2', 171);
+//Legend
+		    svg.append("rect")
+		    .attr("x", 0)
+		    .attr("y", 0)
+		    .attr("width", 20)
+		    .attr("height", 20)
+		    .style("fill", function() { return colors("observed")});
 
-	    svg.append("text")
-		.text("Observed Land-ocean Temperature")
-		.attr("x", 25)
-		.attr("y", 12);
+       		svg.append("text")
+		    .text("Observed Land-Ocean Temperature")
+		    .attr("x", 25)
+		    .attr("y", 12);
+
+		svg.append("rect")
+		    .attr("x", 0)
+		    .attr("y", 25)
+		    .attr("width", 20)
+		    .attr("height", 20)
+		    .style("fill", function() { return colors("solar")});
+
+       		svg.append("text")
+		    .text("Influence of the Sun")
+		    .attr("x", 25)
+		    .attr("y", 37);
+
 	    
-	    
-
-	    
-	}); 
+	    });
+	});
 
 	// Parse years and means. We assume years are sorted.
 	function type(d) {
@@ -179,7 +230,21 @@ LineChart = React.createClass({
 	    return d;
 	}
 
+	// Kelvin To Celsius
+	function kToC(t){
+	    // 272.15K = 1 C
+	    return (t - 272.15);
+	}
+
+	function type2(d) {
+	    d.year = parseInt(d.year);
+	    d.orbitalChanges = kToC(+d.solar) - kToC(287.50310744057606);
+	    return d;
+	}
+
+	    
     },
+    
     
 
     componentDidMount: function() {

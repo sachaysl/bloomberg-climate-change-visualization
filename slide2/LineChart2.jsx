@@ -101,7 +101,9 @@ LineChart2 = React.createClass({
 		    .style("font-size", "11px");
 
 		var colors = d3.scale.category10();
-		var domain = ["observed","orbital"];
+		var domain = ["observed","solar","greenhouse","volcanic","aerosol","land",
+			      "ozone","human","all","orbital"
+			      ];
 		colors.domain(domain);
 		
 //
@@ -200,7 +202,7 @@ LineChart2 = React.createClass({
 		    .style("fill", function() { return colors("observed")});
 
        		svg.append("text")
-		    .text("Land-ocean temperature")
+		    .text("Observed Land-Ocean Temperature")
 		    .attr("x", 25)
 		    .attr("y", 12);
 

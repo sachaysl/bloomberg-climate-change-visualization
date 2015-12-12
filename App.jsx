@@ -35,6 +35,12 @@ App = React.createClass({
 		<Slide2 hps = {this.handlePreviousSlide}  hns = {this.handleNextSlide}/>
 	    );
 	}
+
+	if (slide == 3) {
+	    return (
+		<Slide3 hps = {this.handlePreviousSlide}  hns = {this.handleNextSlide}/>
+	    );
+        }
     }
 });
 		     
