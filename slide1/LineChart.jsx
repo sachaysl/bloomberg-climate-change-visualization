@@ -145,18 +145,27 @@ LineChart = React.createClass({
 	    t.select('line.guide')
 	        .attr('transform', 'translate(' + props.width + ', 0)');
 
-	//    d3.select("#show_guideline").on("change", function(e) {
-	//	guideline.attr('stroke-width', this.checked ? 1 : 0);
-	//	curtain.attr("opacity", this.checked ? 0.75 : 1);
-	    //  })
 
-	    	    svg.append('line')
-	            .attr('stroke', 'rgb(0,0,0)')
-	            .attr('stroke-width', 0.5)
-	            .attr('x1', 0)
-	            .attr('y1', 171)
-	            .attr('x2', 800)
-	            .attr('y2', 171);
+	    svg.append('line')
+		.attr('stroke', 'rgb(0,0,0)')
+	        .attr('stroke-width', 0.5)
+	        .attr('x1', 0)
+	        .attr('y1', 171)
+	        .attr('x2', 800)
+		.attr('y2', 171);
+
+	    svg.append("rect")
+		.attr("x", 0)
+		.attr("y", 0)
+		.attr("width", 20)
+		.attr("height", 20)
+		.style("fill", "#1f77b4")
+
+	    svg.append("text")
+		.text("Land-ocean temperature")
+		.attr("x", 25)
+		.attr("y", 12)
+	    
 	    
 
 	    
