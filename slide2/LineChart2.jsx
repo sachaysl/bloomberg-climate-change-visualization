@@ -191,6 +191,31 @@ LineChart2 = React.createClass({
 	            .attr('y1', 171)
 	            .attr('x2', 800)
 	            .attr('y2', 171);
+//Legend
+		    svg.append("rect")
+		    .attr("x", 0)
+		    .attr("y", 0)
+		    .attr("width", 20)
+		    .attr("height", 20)
+		    .style("fill", function() { return colors("observed")});
+
+       		svg.append("text")
+		    .text("Land-ocean temperature")
+		    .attr("x", 25)
+		    .attr("y", 12);
+
+		svg.append("rect")
+		    .attr("x", 0)
+		    .attr("y", 25)
+		    .attr("width", 20)
+		    .attr("height", 20)
+		    .style("fill", function() { return colors("orbital")});
+
+       		svg.append("text")
+		    .text("Influence of Orbital Changes")
+		    .attr("x", 25)
+		    .attr("y", 37);
+
 	    
 	    });
 	});

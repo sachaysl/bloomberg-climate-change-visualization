@@ -159,12 +159,12 @@ LineChart = React.createClass({
 		.attr("y", 0)
 		.attr("width", 20)
 		.attr("height", 20)
-		.style("fill", "#1f77b4")
+		.style("fill", "#1f77b4");
 
 	    svg.append("text")
 		.text("Land-ocean temperature")
 		.attr("x", 25)
-		.attr("y", 12)
+		.attr("y", 12);
 	    
 	    
 
