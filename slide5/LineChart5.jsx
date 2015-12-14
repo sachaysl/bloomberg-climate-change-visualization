@@ -263,7 +263,7 @@ LineChart5 = React.createClass({
 		    .style("fill", function() { return colors("solar")});
 
        		svg.append("text")
-		    .text("Influence of the sun")
+		    .text("Influence of the Sun")
 		    .attr("x", 25)
 		    .attr("y", 62);
 		
@@ -275,7 +275,7 @@ LineChart5 = React.createClass({
 		    .style("fill", function() { return colors("volcanic")});
 		
        		svg.append("text")
-		    .text("Influence of the sun")
+		    .text("Influence of Volcanoes")
 		    .attr("x", 25)
 		    .attr("y", 87);
 
