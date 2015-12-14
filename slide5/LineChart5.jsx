@@ -32,6 +32,17 @@ LineChart5 = React.createClass({
 		.x(function(d) { return x(d.year); })
 		.y(function(d) { return y(d.orbitalChanges); });
 
+	var line3 = d3.svg.line()
+		.interpolate("monotone")
+		.x(function(d) { return x(d.year); })
+		.y(function(d) { return y(d.solar); });
+
+	var line4 = d3.svg.line()
+		.interpolate("monotone")
+		.x(function(d) { return x(d.year); })
+		.y(function(d) { return y(d.volcanic); });
+
+
 
 	d3.csv("data/observed.csv", type, function(data) {
 	    d3.csv("data/forcings.csv",type2, function(data2) {
@@ -113,13 +124,39 @@ LineChart5 = React.createClass({
 	        .append('path')
 	        .attr('class', 'line')
 	        .style('stroke', function(d) {
-		    return colors("volcanic");
+		    return colors("orbital");
 		})
 	        .attr('clip-path', 'url(#clip)')
 	        .attr('d', function(d) {
 		    return line2(d);
 		});
-		
+
+		svg.selectAll('.line3')
+	        .data([values2])
+	        .enter()
+	        .append('path')
+	        .attr('class', 'line')
+	        .style('stroke', function(d) {
+		    return colors("solar");
+		})
+	        .attr('clip-path', 'url(#clip)')
+	        .attr('d', function(d) {
+		    return line3(d);
+		});
+
+		svg.selectAll('.line3')
+	        .data([values2])
+	        .enter()
+	        .append('path')
+	        .attr('class', 'line')
+	        .style('stroke', function(d) {
+		    return colors("volcanic");
+		})
+	        .attr('clip-path', 'url(#clip)')
+	        .attr('d', function(d) {
+		    return line4(d);
+		});
+
 	    //placeholder for orbitalChanges forcing
 	     //    svg.append('line')
 	       //     .attr('stroke', 'rgb(0,0,0)')
@@ -211,10 +248,10 @@ LineChart5 = React.createClass({
 		    .attr("y", 25)
 		    .attr("width", 20)
 		    .attr("height", 20)
-		    .style("fill", function() { return colors("volcanic")});
+		    .style("fill", function() { return colors("orbital")});
 
        		svg.append("text")
-		    .text("Influence of Volcanoes")
+		    .text("Influence of Orbital Changes")
 		    .attr("x", 25)
 		    .attr("y", 37);
 
@@ -238,7 +275,9 @@ LineChart5 = React.createClass({
 
 	function type2(d) {
 	    d.year = parseInt(d.year);
-	    d.orbitalChanges = kToC(+d.volcanic) - kToC(287.50310744057606);
+	    d.orbitalChanges = kToC(+d.orbitalChanges) - kToC(287.50310744057606);
+	    d.solar =  kToC(+d.solar) - kToC(287.50310744057606);
+	    d.volcanic = kToC(+d.volcanic) - kToC(287.50310744057606);
 	    return d;
 	}
 
