@@ -153,8 +153,8 @@ LineChart2 = React.createClass({
 
 	    /* Create a shared transition for anything we're animating */
 	    var t = svg.transition()
-	            .delay(750)
-	            .duration(6000)
+	            .delay(300)
+	            .duration(4000)
 	            .ease('linear')
 	            .each('end', function() {
 			d3.select('line.guide')
