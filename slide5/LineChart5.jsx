@@ -255,6 +255,31 @@ LineChart5 = React.createClass({
 		    .attr("x", 25)
 		    .attr("y", 37);
 
+		svg.append("rect")
+		    .attr("x", 0)
+		    .attr("y", 50)
+		    .attr("width", 20)
+		    .attr("height", 20)
+		    .style("fill", function() { return colors("solar")});
+
+       		svg.append("text")
+		    .text("Influence of the sun")
+		    .attr("x", 25)
+		    .attr("y", 62);
+		
+		svg.append("rect")
+		    .attr("x", 0)
+		    .attr("y", 75)
+		    .attr("width", 20)
+		    .attr("height", 20)
+		    .style("fill", function() { return colors("volcanic")});
+		
+       		svg.append("text")
+		    .text("Influence of the sun")
+		    .attr("x", 25)
+		    .attr("y", 87);
+
+
 	    
 	    });
 	});
