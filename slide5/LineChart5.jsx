@@ -118,7 +118,7 @@ LineChart5 = React.createClass({
 
 		var colors = d3.scale.category10();
 		var domain = ["observed","solar","greenhouse","volcanic","aerosol","land",
-			      "ozone","human","all","orbital"
+			      "ozone","human","natural","orbital"
 			      ];
 		colors.domain(domain);
 		
@@ -284,10 +284,27 @@ LineChart5 = React.createClass({
 		    .attr("x", 25)
 		    .attr("y", 87);
 
+		svg.append("rect")
+		    .attr("x", 0)
+		    .attr("y", 100)
+		    .attr("width", 20)
+		    .attr("height", 20)
+		    .style("fill", function() { return colors("natural")});
+		
+       		svg.append("text")
+		    .text("Combined Influence of Natural Factors ")
+		    .attr("x", 25)
+		    .attr("y", 112);
+
+
 		var t0 = svg.transition().delay(4000).duration(3000);
 
-		t0.selectAll(".line").attr("d", line5);
-//		t0.selectAll(".label").attr("transform", transform).text(city);
+		t0.selectAll(".line")
+		    .style('stroke', function(d) {
+		    return colors("natural");
+		    })
+		    .attr("d", line5);
+		
 
 
 	    
