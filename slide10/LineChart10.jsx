@@ -47,6 +47,10 @@ LineChart10 = React.createClass({
 		.x(function(d) { return x(d.year); })
 		.y(function(d) { return y(d.human); });
 
+	var line6 = d3.svg.line()
+		.interpolate("monotone")
+		.x(function(d) { return x(d.year); })
+		.y(function(d) { return y(d. anthropogenicTroposphericAerosol); });
 
 
 	d3.csv("data/observed.csv", type, function(data) {
@@ -161,6 +165,20 @@ LineChart10 = React.createClass({
 	        .attr('d', function(d) {
 		    return line4(d);
 		});
+
+		svg.selectAll('.line3')
+	        .data([values2])
+	        .enter()
+	        .append('path')
+	        .attr('class', 'line')
+	        .style('stroke', function(d) {
+		    return colors("aerosol");
+		})
+	        .attr('clip-path', 'url(#clip)')
+	        .attr('d', function(d) {
+		    return line6(d);
+		});
+
 
 	    //placeholder for orbitalChanges forcing
 	     //    svg.append('line')
@@ -289,13 +307,24 @@ LineChart10 = React.createClass({
 		    .attr("y", 100)
 		    .attr("width", 20)
 		    .attr("height", 20)
+		    .style("fill", function() { return colors("aerosol")});
+		
+       		svg.append("text")
+		    .text("Influence of Aerosols ")
+		    .attr("x", 25)
+		    .attr("y", 112);
+
+		svg.append("rect")
+		    .attr("x", 0)
+		    .attr("y", 125)
+		    .attr("width", 20)
+		    .attr("height", 20)
 		    .style("fill", function() { return colors("human")});
 		
        		svg.append("text")
 		    .text("Combined Influence of Human Factors ")
 		    .attr("x", 25)
-		    .attr("y", 112);
-
+		    .attr("y", 137);
 
 		var t0 = svg.transition().delay(4000).duration(3000);
 
