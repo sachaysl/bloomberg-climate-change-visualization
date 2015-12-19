@@ -1,4 +1,4 @@
-LineChart5 = React.createClass({
+LineChart4 = React.createClass({
 
     updateChart: function(props) {
 	var height = props.height;
@@ -31,22 +31,6 @@ LineChart5 = React.createClass({
 		.interpolate("monotone")
 		.x(function(d) { return x(d.year); })
 		.y(function(d) { return y(d.orbitalChanges); });
-
-	var line3 = d3.svg.line()
-		.interpolate("monotone")
-		.x(function(d) { return x(d.year); })
-		.y(function(d) { return y(d.solar); });
-
-	var line4 = d3.svg.line()
-		.interpolate("monotone")
-		.x(function(d) { return x(d.year); })
-		.y(function(d) { return y(d.volcanic); });
-
-	var line5 = d3.svg.line()
-		.interpolate("monotone")
-		.x(function(d) { return x(d.year); })
-		.y(function(d) { return y(d.natural); });
-
 
 
 	d3.csv("data/observed.csv", type, function(data) {
@@ -117,39 +101,13 @@ LineChart5 = React.createClass({
 		    .style("font-size", "11px");
 
 		var colors = d3.scale.category10();
-		var domain = ["observed","solar","greenhouse","volcanic","aerosol","natural",
-			      "ozone","human","land","orbital"
+		var domain = ["observed","solar","greenhouse","volcanic","aerosol","land",
+			      "ozone","human","all","orbital"
 			      ];
 		colors.domain(domain);
 		
 //
-		svg.selectAll('.line3')
-	        .data([values2])
-	        .enter()
-	        .append('path')
-	        .attr('class', 'line')
-	        .style('stroke', function(d) {
-		    return colors("orbital");
-		})
-	        .attr('clip-path', 'url(#clip)')
-	        .attr('d', function(d) {
-		    return line2(d);
-		});
-
-		svg.selectAll('.line3')
-	        .data([values2])
-	        .enter()
-	        .append('path')
-	        .attr('class', 'line')
-	        .style('stroke', function(d) {
-		    return colors("solar");
-		})
-	        .attr('clip-path', 'url(#clip)')
-	        .attr('d', function(d) {
-		    return line3(d);
-		});
-
-		svg.selectAll('.line3')
+		svg.selectAll('.line')
 	        .data([values2])
 	        .enter()
 	        .append('path')
@@ -159,9 +117,9 @@ LineChart5 = React.createClass({
 		})
 	        .attr('clip-path', 'url(#clip)')
 	        .attr('d', function(d) {
-		    return line4(d);
+		    return line2(d);
 		});
-
+		
 	    //placeholder for orbitalChanges forcing
 	     //    svg.append('line')
 	       //     .attr('stroke', 'rgb(0,0,0)')
@@ -219,7 +177,7 @@ LineChart5 = React.createClass({
 	        .data([values])
 	        .enter()
 	        .append('path')
-	        .attr('class', 'lineTwo')	
+	        .attr('class', 'line')
 	        .style('stroke', function(d) {
 		    return colors("observed");
 		})
@@ -253,59 +211,12 @@ LineChart5 = React.createClass({
 		    .attr("y", 25)
 		    .attr("width", 20)
 		    .attr("height", 20)
-		    .style("fill", function() { return colors("orbital")});
-
-       		svg.append("text")
-		    .text("Influence of Orbital Changes")
-		    .attr("x", 25)
-		    .attr("y", 37);
-
-		svg.append("rect")
-		    .attr("x", 0)
-		    .attr("y", 50)
-		    .attr("width", 20)
-		    .attr("height", 20)
-		    .style("fill", function() { return colors("solar")});
-
-       		svg.append("text")
-		    .text("Influence of the Sun")
-		    .attr("x", 25)
-		    .attr("y", 62);
-		
-		svg.append("rect")
-		    .attr("x", 0)
-		    .attr("y", 75)
-		    .attr("width", 20)
-		    .attr("height", 20)
 		    .style("fill", function() { return colors("volcanic")});
-		
+
        		svg.append("text")
 		    .text("Influence of Volcanoes")
 		    .attr("x", 25)
-		    .attr("y", 87);
-
-		svg.append("rect")
-		    .attr("x", 0)
-		    .attr("y", 100)
-		    .attr("width", 20)
-		    .attr("height", 20)
-		    .style("fill", function() { return colors("natural")});
-		
-       		svg.append("text")
-		    .text("Combined Influence of Natural Factors ")
-		    .attr("x", 25)
-		    .attr("y", 112);
-
-
-		var t0 = svg.transition().delay(4000).duration(3000);
-
-		t0.selectAll(".line")
-		    .style('stroke', function(d) {
-		    return colors("natural");
-		    })
-		    .attr("d", line5);
-		
-
+		    .attr("y", 37);
 
 	    
 	    });
@@ -315,7 +226,7 @@ LineChart5 = React.createClass({
 	function type(d) {
 	    d.year = parseInt(d.year);
 	    d.annualMean = +d.annualMean + 0.23;
-
+	    d.orbitalChanges = +d.orbitalChanges - 287.50310744057606;
 	    return d;
 	}
 
@@ -327,10 +238,7 @@ LineChart5 = React.createClass({
 
 	function type2(d) {
 	    d.year = parseInt(d.year);
-	    d.orbitalChanges = kToC(+d.orbitalChanges) - kToC(287.50310744057606);
-	    d.solar =  kToC(+d.solar) - kToC(287.50310744057606);
-	    d.volcanic = kToC(+d.volcanic) - kToC(287.50310744057606);
-	    d.natural = +d.natural - 287.50310744057606;
+	    d.orbitalChanges = kToC(+d.volcanic) - kToC(287.50310744057606);
 	    return d;
 	}
 

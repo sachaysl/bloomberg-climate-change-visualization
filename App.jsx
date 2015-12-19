@@ -48,9 +48,15 @@ App = React.createClass({
 	    );
         }
 
-	if (slide == 5) {
+ 	if (slide == 5) {
 	    return (
 		<Slide5 hps = {this.handlePreviousSlide}  hns = {this.handleNextSlide}/>
+	    );
+	}
+
+	if (slide == 6) {
+	    return (
+		<Slide6 hps = {this.handlePreviousSlide}  hns = {this.handleNextSlide}/>
 	    );
 	}
     }

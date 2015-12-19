@@ -12,7 +12,7 @@ Text5 = React.createClass({
 	return (
 
 	    <h3 style= {this.h3Style}>
-	      If it were, then the response to natural factos should match
+	      If it were, then the response to natural factors should match
 	      the observed temperature. Adding the natural factors together
 	      just doesn't add up.
 	    </h3>
