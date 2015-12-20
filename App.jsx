@@ -2,7 +2,7 @@ App = React.createClass({
 
     getInitialState: function() {
 	return {
-	    slide: 1
+	    slide: 0
 	};
     },
 
@@ -22,6 +22,13 @@ App = React.createClass({
 
     render: function() {
 	var slide = this.state.slide;
+
+	if (slide == 0) {
+	    return (
+		<Slide0 hns = {this.handleNextSlide} />
+	    );
+	}
+	
 
 	if (slide == 1) {
 	    return (
@@ -59,6 +66,40 @@ App = React.createClass({
 		<Slide6 hps = {this.handlePreviousSlide}  hns = {this.handleNextSlide}/>
 	    );
 	}
+	
+	if (slide == 7) {
+	    return (
+		<Slide7 hps = {this.handlePreviousSlide}  hns = {this.handleNextSlide}/>
+	    );
+	}
+
+	if (slide == 8) {
+	    return (
+		<Slide8 hps = {this.handlePreviousSlide}  hns = {this.handleNextSlide}/>
+	    );
+	}
+	
+	if (slide == 9) {
+	    return (
+		<Slide9 hps = {this.handlePreviousSlide}  hns = {this.handleNextSlide}/>
+	    );
+	}
+
+	if (slide == 10) {
+	    return (
+		<Slide10 hps = {this.handlePreviousSlide}  hns = {this.handleNextSlide}/>
+	    );
+	}
+	
+	if (slide == 11) {
+	    return (
+		<Slide11 hps = {this.handlePreviousSlide}/>
+	    );
+	}
+
+
+
+
     }
 });
 		     

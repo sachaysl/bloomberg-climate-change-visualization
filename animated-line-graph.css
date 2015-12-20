@@ -1,5 +1,11 @@
 /* CSS declarations go here */
 
+
+.area.confidence {
+    filter: alpha(opacity=30);
+    opacity: 0.3;
+}
+
 .palette {
     cursor: pointer;
     display: inline-block;

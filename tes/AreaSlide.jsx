@@ -1,4 +1,5 @@
-Slide8 = React.createClass({
+Slide0 = React.createClass({
+
     divStyle: {
 	textAlign: 'center'
     },
@@ -17,20 +18,17 @@ Slide8 = React.createClass({
 	return (
 	    <div style={this.divStyle}>
 		<div className="btn-group" style= {this.buttonStyle1} role="group">
-		  <button type="button" onClick = {this.props.hps} className="btn btn-primary">
+		  <button type="button" className="btn btn-primary">
 		    Previous Slide
 		  </button>
 		</div>
 		<div class="btn-group" style = {this.buttonStyle2} role="group">
-		  <button type="button" onClick={this.props.hns} className="btn btn-primary">
+		  <button type="button" onClick = {this.props.hns}className="btn btn-primary">
 		    Next Slide
 		  </button>
 		</div>
 	
-
-	      <Header8 />
-	      <Text8 />
-	      <LineChart8 />	
+	      <AreaChart />	
 	    </div>
 	);
     }

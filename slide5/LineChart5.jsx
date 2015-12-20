@@ -330,7 +330,7 @@ LineChart5 = React.createClass({
 	    d.orbitalChanges = kToC(+d.orbitalChanges) - kToC(287.50310744057606);
 	    d.solar =  kToC(+d.solar) - kToC(287.50310744057606);
 	    d.volcanic = kToC(+d.volcanic) - kToC(287.50310744057606);
-	    d.natural = +d.natural - 287.50310744057606;
+	    d.natural = kToC(+d.natural) - kToC(287.50310744057606);
 	    return d;
 	}
 
