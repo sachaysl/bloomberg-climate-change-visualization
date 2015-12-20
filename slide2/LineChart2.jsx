@@ -229,6 +229,8 @@ LineChart2 = React.createClass({
 
        		svg.append("text")
 		    .text("Observed Land-Ocean Temperature")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 12);
 
@@ -241,9 +243,18 @@ LineChart2 = React.createClass({
 
        		svg.append("text")
 		    .text("Influence of Orbital Changes")
+       		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 37);
 
+		svg.append("text")
+		    .text("Shaded Region Represents 95% Confidence Interval")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
+		    .style("fill", function() { return colors("orbital")})
+		    .attr("x", 250)
+		    .attr("y", 300);
 	    
 	    });
 	});
