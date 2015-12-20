@@ -119,7 +119,18 @@ LineChart2 = React.createClass({
 			      ];
 		colors.domain(domain);
 		
-//
+		//
+
+	        svg.append('path')
+		.attr({ "class": "area confidence"})
+		.data([values2])
+		.style('fill', function(d) {
+		    return colors("orbital");
+		})
+	        .attr('clip-path', 'url(#clip)')
+		.attr('d', areaOrbit);
+	
+		
 		svg.selectAll('.line')
 	        .data([values2])
 	        .enter()
@@ -132,21 +143,6 @@ LineChart2 = React.createClass({
 	        .attr('d', function(d) {
 		    return line2(d);
 		});
-
-		console.log("entered");
-
-		
-	        svg.append('path')
-		.data([values2])
-		.style('fill', 'green')
-	        //.attr('clip-path', 'url(#clip)')
-		.attr('d', areaOrbit);
-	       // .attr('d', function(d) {
-	//	    return areaOrbit(d);
-	//	});
-
-		console.log("exited");
-
 		
 		
 	    //placeholder for orbitalChanges forcing
@@ -201,15 +197,6 @@ LineChart2 = React.createClass({
 	//	guideline.attr('stroke-width', this.checked ? 1 : 0);
 	//	curtain.attr("opacity", this.checked ? 0.75 : 1);
 		//  })
-
-
-	        svg.append('path')
-		.data([values2])
-		.style('fill', 'green')
-	        //.attr('clip-path', 'url(#clip)')
-		.attr('d', areaOrbit);
-	
-
 
 		svg.selectAll('.line2')
 	        .data([values])
@@ -277,8 +264,8 @@ LineChart2 = React.createClass({
 	function type2(d) {
 	    d.year = parseInt(d.year);
 	    d.orbitalChanges = kToC(+d.orbitalChanges) - kToC(287.50310744057606);
-	    d.orbitalChangesUpper = env + kToC(+d.orbitalChanges) - kToC(287.50310744057606);
-	    d.orbitalChangesLower = -env + kToC(+d.orbitalChanges) - kToC(287.50310744057606);
+	    d.orbitalChangesUpper = env + d.orbitalChanges;
+	    d.orbitalChangesLower = -env + d.orbitalChanges;
 	    console.log(d.orbitalChanges);
 	    console.log("break");
 	    console.log(d.orbitalChangesUpper);

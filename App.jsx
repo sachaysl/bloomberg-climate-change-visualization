@@ -2,7 +2,7 @@ App = React.createClass({
 
     getInitialState: function() {
 	return {
-	    slide: 0
+	    slide: 1
 	};
     },
 
