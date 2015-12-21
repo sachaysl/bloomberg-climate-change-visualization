@@ -5,6 +5,9 @@ LineChart3 = React.createClass({
 	var width = props.width;
 	var parse = d3.time.format("%b %Y").parse;
 
+	// 2 standard deviations in Celsius
+	var env = 1.96*.14;
+	
 	// Scales and axes. Note the inverted domain for the y-scale: bigger is up!
 	var x = d3.scale.linear().range([0, width]),
 	    y = d3.scale.linear().range([height, 0]),
@@ -19,8 +22,17 @@ LineChart3 = React.createClass({
 		.x(function(d) { return x(d.year); })
 		.y0(height)
 		.y1(function(d) { return y(d.annualMean); });
+	
+	var areaSolar = d3.svg.area()
+		.interpolate(interpolation)
+		.x(function(d) { return x(d.year); })
+		.y0(function(d) { return y(d.solarLower); })
+		.y1(function(d) { return y(d.solarUpper); });
 
 	// A line generator, for the dark stroke.
+
+	var interpolation = "linear";
+	
 
 	var line = d3.svg.line()
 		.interpolate("monotone")
@@ -35,23 +47,10 @@ LineChart3 = React.createClass({
 
 	d3.csv("data/observed.csv", type, function(data) {
 	    d3.csv("data/forcings.csv",type2, function(data2) {
-
-	    // Filter to one symbol; the S&P 500.
-	  //  var values = data.filter(function(d) {
-	//	return d.symbol == "AMZN";;
-	  //  });
-
-	 //   var msft = data.filter(function(d) {
-	//	return d.symbol == "MSFT";
-	 //   });
-
-	 //   var ibm = data.filter(function(d) {
-	    //	return d.symbol == 'IBM';
               
 		var values = data;
 		var values2 = data2;
-	    
-	  
+	    	  
 	    // Compute the minimum and maximum date, and the maximum price.
 	x.domain([values[0].year, values[values.length - 1].year]);
 	y.domain([-1, 1]);
@@ -59,7 +58,7 @@ LineChart3 = React.createClass({
 	    // Add an SVG element with the desired dimensions and margin.
 	    var svg = d3.select("svg")
 	            .append("g")
-	            .attr("transform", "translate(" + props.marginLeft + "," + props.marginTop + ")")
+	            .attr("transform", "translate(" + props.marginLeft + "," + props.marginTop + ")");
 
 	    // Add the clip path.
 	    svg.append("clipPath")
@@ -105,8 +104,18 @@ LineChart3 = React.createClass({
 			      "ozone","human","all","orbital"
 			      ];
 		colors.domain(domain);
-		
-//
+
+
+	        svg.append('path')
+		.attr({ "class": "area confidence"})
+		.data([values2])
+		.style('fill', function(d) {
+		    return colors("solar");
+		})
+	        .attr('clip-path', 'url(#clip)')
+		.attr('d', areaSolar);
+	
+
 		svg.selectAll('.line')
 	        .data([values2])
 	        .enter()
@@ -203,6 +212,8 @@ LineChart3 = React.createClass({
 
        		svg.append("text")
 		    .text("Observed Land-Ocean Temperature")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 12);
 
@@ -215,8 +226,18 @@ LineChart3 = React.createClass({
 
        		svg.append("text")
 		    .text("Influence of the Sun")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 37);
+
+		svg.append("text")
+		    .text("Shaded Region Represents 95% Confidence Interval")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
+		    .style("fill", function() { return colors("solar")})
+		    .attr("x", 250)
+		    .attr("y", 300);
 
 	    
 	    });
@@ -239,6 +260,8 @@ LineChart3 = React.createClass({
 	function type2(d) {
 	    d.year = parseInt(d.year);
 	    d.orbitalChanges = kToC(+d.solar) - kToC(287.50310744057606);
+	    d.solarUpper = env + d.orbitalChanges;
+	    d.solarLower = - env + d.orbitalChanges;
 	    return d;
 	}
 

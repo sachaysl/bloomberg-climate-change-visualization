@@ -6,7 +6,7 @@ LineChart2 = React.createClass({
 	var parse = d3.time.format("%b %Y").parse;
 
 	// 2 standard deviations in Celsius
-	var env = 1.96*.14
+	var env = 1.96*.14;
 	
 	// Scales and axes. Note the inverted domain for the y-scale: bigger is up!
 	var x = d3.scale.linear().range([0, width]),
@@ -72,7 +72,7 @@ LineChart2 = React.createClass({
 	    // Add an SVG element with the desired dimensions and margin.
 	    var svg = d3.select("svg")
 	            .append("g")
-	            .attr("transform", "translate(" + props.marginLeft + "," + props.marginTop + ")")
+	            .attr("transform", "translate(" + props.marginLeft + "," + props.marginTop + ")");
 
 	    // Add the clip path.
 	    svg.append("clipPath")
