@@ -5,6 +5,9 @@ LineChart5 = React.createClass({
 	var width = props.width;
 	var parse = d3.time.format("%b %Y").parse;
 
+	// 2 standard deviations in Celsius
+	var env = 1.96*.14;
+	
 	// Scales and axes. Note the inverted domain for the y-scale: bigger is up!
 	var x = d3.scale.linear().range([0, width]),
 	    y = d3.scale.linear().range([height, 0]),
@@ -19,8 +22,17 @@ LineChart5 = React.createClass({
 		.x(function(d) { return x(d.year); })
 		.y0(height)
 		.y1(function(d) { return y(d.annualMean); });
+	
+        var areaNatural = d3.svg.area()
+		.interpolate(interpolation)
+		.x(function(d) { return x(d.year); })
+		.y0(function(d) { return y(d.naturalLower); })
+		.y1(function(d) { return y(d.naturalUpper); });
 
 	// A line generator, for the dark stroke.
+
+	var interpolation = "linear";
+	
 
 	var line = d3.svg.line()
 		.interpolate("monotone")
@@ -46,8 +58,6 @@ LineChart5 = React.createClass({
 		.interpolate("monotone")
 		.x(function(d) { return x(d.year); })
 		.y(function(d) { return y(d.natural); });
-
-
 
 	d3.csv("data/observed.csv", type, function(data) {
 	    d3.csv("data/forcings.csv",type2, function(data2) {
@@ -75,7 +85,7 @@ LineChart5 = React.createClass({
 	    // Add an SVG element with the desired dimensions and margin.
 	    var svg = d3.select("svg")
 	            .append("g")
-	            .attr("transform", "translate(" + props.marginLeft + "," + props.marginTop + ")")
+	            .attr("transform", "translate(" + props.marginLeft + "," + props.marginTop + ")");
 
 	    // Add the clip path.
 	    svg.append("clipPath")
@@ -122,7 +132,18 @@ LineChart5 = React.createClass({
 			      ];
 		colors.domain(domain);
 		
-//
+		//
+
+	        svg.append('path')
+		.attr({ "class": "area confidence"})
+		.data([values2])
+		.style('fill', function(d) {
+		    return colors("natural");
+		})
+	        .attr('clip-path', 'url(#clip)')
+		.attr('d', areaNatural);
+
+		
 		svg.selectAll('.line3')
 	        .data([values2])
 	        .enter()
@@ -245,6 +266,8 @@ LineChart5 = React.createClass({
 
        		svg.append("text")
 		    .text("Observed Land-Ocean Temperature")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 12);
 
@@ -257,6 +280,8 @@ LineChart5 = React.createClass({
 
        		svg.append("text")
 		    .text("Influence of Orbital Changes")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 37);
 
@@ -269,6 +294,8 @@ LineChart5 = React.createClass({
 
        		svg.append("text")
 		    .text("Influence of the Sun")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 62);
 		
@@ -281,6 +308,8 @@ LineChart5 = React.createClass({
 		
        		svg.append("text")
 		    .text("Influence of Volcanoes")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 87);
 
@@ -293,6 +322,8 @@ LineChart5 = React.createClass({
 		
        		svg.append("text")
 		    .text("Combined Influence of Natural Factors ")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 112);
 
@@ -304,7 +335,15 @@ LineChart5 = React.createClass({
 		    return colors("natural");
 		    })
 		    .attr("d", line5);
-		
+
+		svg.append("text")
+		    .text("Shaded Region Represents 95% Confidence Interval")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
+		    .style("fill", function() { return colors("natural")})
+		    .attr("x", 250)
+		    .attr("y", 300);
+
 
 
 	    
@@ -331,6 +370,8 @@ LineChart5 = React.createClass({
 	    d.solar =  kToC(+d.solar) - kToC(287.50310744057606);
 	    d.volcanic = kToC(+d.volcanic) - kToC(287.50310744057606);
 	    d.natural = kToC(+d.natural) - kToC(287.50310744057606);
+	    d.naturalLower = env + d.natural;
+	    d.naturalUpper = -env + d.natural;
 	    return d;
 	}
 

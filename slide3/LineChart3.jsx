@@ -247,7 +247,7 @@ LineChart3 = React.createClass({
 	function type(d) {
 	    d.year = parseInt(d.year);
 	    d.annualMean = +d.annualMean + 0.23;
-	    d.orbitalChanges = +d.orbitalChanges - 287.50310744057606;
+
 	    return d;
 	}
 

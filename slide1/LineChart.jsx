@@ -163,6 +163,8 @@ LineChart = React.createClass({
 
 	    svg.append("text")
 		.text("Observed Land-ocean Temperature")
+	    	.attr("font-family", "helvetica")
+		.style("font-size", "11px")
 		.attr("x", 25)
 		.attr("y", 12);
 	    
