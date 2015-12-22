@@ -29,10 +29,9 @@ LineChart5 = React.createClass({
 		.y0(function(d) { return y(d.naturalLower); })
 		.y1(function(d) { return y(d.naturalUpper); });
 
-	// A line generator, for the dark stroke.
-
 	var interpolation = "linear";
-	
+
+	// A line generator, for the dark stroke.
 
 	var line = d3.svg.line()
 		.interpolate("monotone")

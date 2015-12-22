@@ -23,6 +23,14 @@ LineChart10 = React.createClass({
 		.x(function(d) { return x(d.year); })
 		.y0(height)
 		.y1(function(d) { return y(d.annualMean); });
+
+	var areaHuman = d3.svg.area()
+		.interpolate(interpolation)
+		.x(function(d) { return x(d.year); })
+		.y0(function(d) { return y(d.humanLower); })
+		.y1(function(d) { return y(d.humanUpper); });
+
+	var interpolation = "linear";
 		
 	// A line generator, for the dark stroke.
 
@@ -129,6 +137,15 @@ LineChart10 = React.createClass({
 			      "ozone","human","natural","orbital"
 			      ];
 		colors.domain(domain);
+
+		svg.append('path')
+		.attr({ "class": "area confidence"})
+		.data([values2])
+		.style('fill', function(d) {
+		    return colors("natural");
+		})
+	        .attr('clip-path', 'url(#clip)')
+		.attr('d', areaHuman);
 
 		
 //
@@ -280,6 +297,8 @@ LineChart10 = React.createClass({
 
        		svg.append("text")
 		    .text("Influence of Changes in Land Use")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 37);
 
@@ -292,6 +311,8 @@ LineChart10 = React.createClass({
 
        		svg.append("text")
 		    .text("Influence of Ozone")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 62);
 		
@@ -304,6 +325,8 @@ LineChart10 = React.createClass({
 		
        		svg.append("text")
 		    .text("Influence of Greenhouse Gases")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 87);
 
@@ -316,6 +339,8 @@ LineChart10 = React.createClass({
 		
        		svg.append("text")
 		    .text("Influence of Aerosols ")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 112);
 
@@ -328,6 +353,8 @@ LineChart10 = React.createClass({
 		
        		svg.append("text")
 		    .text("Combined Influence of Human Factors ")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 137);
 
@@ -338,7 +365,14 @@ LineChart10 = React.createClass({
 		    return colors("human");
 		    })
 		    .attr("d", line5);
-		
+
+		svg.append("text")
+		    .text("Shaded Region Represents 95% Confidence Interval")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
+		    .style("fill", function() { return colors("human")})
+		    .attr("x", 250)
+		    .attr("y", 300);
 
 
 	    
@@ -366,7 +400,8 @@ LineChart10 = React.createClass({
 	    d.greenhouseGases =  kToC(+d.greenhouseGases) - kToC(287.50310744057606);
 	    d.human = kToC(+d.human) - kToC(287.50310744057606);
 	    d.anthropogenicTroposphericAerosol = kToC(+d.anthropogenicTroposphericAerosol)- kToC(287.50310744057606);
-
+	    d.humanLower = env + d.human;
+	    d.humanUpper = -env + d.human;
 	    return d;
 	}
 
