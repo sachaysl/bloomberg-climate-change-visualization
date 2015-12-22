@@ -66,7 +66,7 @@ LineChart9 = React.createClass({
 	  
 	    // Compute the minimum and maximum date, and the maximum price.
 	x.domain([values[0].year, values[values.length - 1].year]);
-	y.domain([-1, 1]);
+	y.domain([-1, 1.5]);
 
 	    // Add an SVG element with the desired dimensions and margin.
 	    var svg = d3.select("svg")
@@ -210,9 +210,9 @@ LineChart9 = React.createClass({
 	            .attr('stroke', 'rgb(0,0,0)')
 	            .attr('stroke-width', 0.5)
 	            .attr('x1', 0)
-	            .attr('y1', 171)
+	            .attr('y1', 205)
 	            .attr('x2', 800)
-	            .attr('y2', 171);
+	            .attr('y2', 205);
 //Legend
 		    svg.append("rect")
 		    .attr("x", 0)
