@@ -21,13 +21,6 @@ Slide11 = React.createClass({
 		    Previous Slide
 		  </button>
 		</div>
-		<div class="btn-group" style = {this.buttonStyle2} role="group">
-		  <button type="button" className="btn btn-primary">
-		    Next Slide
-		  </button>
-		</div>
-
-	
 
 	      <Header11 />
 	      <Text11 />

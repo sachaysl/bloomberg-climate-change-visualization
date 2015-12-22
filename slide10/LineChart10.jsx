@@ -86,7 +86,7 @@ LineChart10 = React.createClass({
 	  
 	    // Compute the minimum and maximum date, and the maximum price.
 	x.domain([values[0].year, values[values.length - 1].year]);
-	y.domain([-1, 1]);
+	y.domain([-1, 1.5]);
 
 	    // Add an SVG element with the desired dimensions and margin.
 	    var svg = d3.select("svg")
@@ -269,9 +269,9 @@ LineChart10 = React.createClass({
 	            .attr('stroke', 'rgb(0,0,0)')
 	            .attr('stroke-width', 0.5)
 	            .attr('x1', 0)
-	            .attr('y1', 171)
+	            .attr('y1', 205)
 	            .attr('x2', 800)
-	            .attr('y2', 171);
+	            .attr('y2', 205);
 //Legend
 		    svg.append("rect")
 		    .attr("x", 0)
@@ -355,6 +355,16 @@ LineChart10 = React.createClass({
 		    .attr("x", 25)
 		    .attr("y", 137);
 
+		
+		
+		svg.append("text")
+		    .text("Shaded Region Represents 95% Confidence Interval")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
+		    .style("fill", function() { return colors("human")})
+		    .attr("x", 250)
+		    .attr("y", 300);
+
 		var t0 = svg.transition().delay(4000).duration(3000);
 
 		t0.selectAll(".line")
@@ -367,19 +377,6 @@ LineChart10 = React.createClass({
 		    .style('fill', function(d) {
 		    return colors("human");
 		    });
-
-		
-
-		t0.selectAll("")
-		
-		svg.append("text")
-		    .text("Shaded Region Represents 95% Confidence Interval")
-		    .attr("font-family", "helvetica")
-		    .style("font-size", "11px")
-		    .style("fill", function() { return colors("human")})
-		    .attr("x", 250)
-		    .attr("y", 300);
-
 
 	    
 	    });
