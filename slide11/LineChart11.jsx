@@ -5,6 +5,9 @@ LineChart11 = React.createClass({
 	var width = props.width;
 	var parse = d3.time.format("%b %Y").parse;
 
+	// 2 standard deviations in Celsius
+	var env = 1.96*.14;
+
 	// Scales and axes. Note the inverted domain for the y-scale: bigger is up!
 	var x = d3.scale.linear().range([0, width]),
 	    y = d3.scale.linear().range([height, 0]),
@@ -20,6 +23,14 @@ LineChart11 = React.createClass({
 		.y0(height)
 		.y1(function(d) { return y(d.annualMean); });
 
+	var areaAll= d3.svg.area()
+		.interpolate(interpolation)
+		.x(function(d) { return x(d.year); })
+		.y0(function(d) { return y(d.allLower); })
+		.y1(function(d) { return y(d.allUpper); });
+
+	var interpolation = "linear";
+	
 	// A line generator, for the dark stroke.
 
 	var line = d3.svg.line()
@@ -105,6 +116,13 @@ LineChart11 = React.createClass({
 			      "ozone","human","land","orbital"
 			      ];
 		colors.domain(domain);
+
+		svg.append('path')
+		.attr({ "class": "area confidence"})
+		.data([values2])
+		.style('fill', "black")
+	        .attr('clip-path', 'url(#clip)')
+		.attr('d', areaAll);
 		
 //
 		svg.selectAll('.line')
@@ -201,6 +219,8 @@ LineChart11 = React.createClass({
 
        		svg.append("text")
 		    .text("Observed Land-Ocean Temperature")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 12);
 
@@ -213,9 +233,18 @@ LineChart11 = React.createClass({
 
        		svg.append("text")
 		    .text("Combined Influence of All Factors")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 37);
 
+		svg.append("text")
+		    .text("Shaded Region Represents 95% Confidence Interval")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
+		    .style("fill", "black")
+		    .attr("x", 250)
+		    .attr("y", 300);    
 	    
 	    });
 	});
@@ -237,6 +266,8 @@ LineChart11 = React.createClass({
 	function type2(d) {
 	    d.year = parseInt(d.year);
 	    d.orbitalChanges = kToC(+d.allForcings) - kToC(287.50310744057606);
+	    d.allUpper = env + d.orbitalChanges;
+	    d.allLower = -env + d.orbitalChanges;
 	    return d;
 	}
 
