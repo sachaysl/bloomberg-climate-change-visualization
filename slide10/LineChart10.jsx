@@ -141,13 +141,10 @@ LineChart10 = React.createClass({
 		svg.append('path')
 		.attr({ "class": "area confidence"})
 		.data([values2])
-		.style('fill', function(d) {
-		    return colors("natural");
-		})
+		.style('fill', 'white')
 	        .attr('clip-path', 'url(#clip)')
 		.attr('d', areaHuman);
 
-		
 //
 		svg.selectAll('.line3')
 	        .data([values2])
@@ -366,6 +363,15 @@ LineChart10 = React.createClass({
 		    })
 		    .attr("d", line5);
 
+		t0.selectAll(".area.confidence")
+		    .style('fill', function(d) {
+		    return colors("human");
+		    });
+
+		
+
+		t0.selectAll("")
+		
 		svg.append("text")
 		    .text("Shaded Region Represents 95% Confidence Interval")
 		    .attr("font-family", "helvetica")
