@@ -5,6 +5,9 @@ LineChart6 = React.createClass({
 	var width = props.width;
 	var parse = d3.time.format("%b %Y").parse;
 
+	// 2 standard deviations in Celsius
+	var env = 1.96*.14;
+
 	// Scales and axes. Note the inverted domain for the y-scale: bigger is up!
 	var x = d3.scale.linear().range([0, width]),
 	    y = d3.scale.linear().range([height, 0]),
@@ -20,8 +23,16 @@ LineChart6 = React.createClass({
 		.y0(height)
 		.y1(function(d) { return y(d.annualMean); });
 
+	var areaLand = d3.svg.area()
+		.interpolate(interpolation)
+		.x(function(d) { return x(d.year); })
+		.y0(function(d) { return y(d.landLower); })
+		.y1(function(d) { return y(d.landUpper); });
+
 	// A line generator, for the dark stroke.
 
+	var interpolation = "linear";
+	
 	var line = d3.svg.line()
 		.interpolate("monotone")
 		.x(function(d) { return x(d.year); })
@@ -105,6 +116,18 @@ LineChart6 = React.createClass({
 			      "ozone","human","land","orbital"
 			      ];
 		colors.domain(domain);
+
+		svg.append('path')
+		.attr({ "class": "area confidence"})
+		.data([values2])
+		.style('fill', function(d) {
+		    return colors("land");
+		})
+	        .attr('clip-path', 'url(#clip)')
+		.attr('d', areaLand);
+
+
+
 		
 //
 		svg.selectAll('.line')
@@ -203,6 +226,8 @@ LineChart6 = React.createClass({
 
        		svg.append("text")
 		    .text("Observed Land-Ocean Temperature")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 12);
 
@@ -215,8 +240,18 @@ LineChart6 = React.createClass({
 
        		svg.append("text")
 		    .text("Influence of Changes In Land Use")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 37);
+
+		svg.append("text")
+		    .text("Shaded Region Represents 95% Confidence Interval")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
+		    .style("fill", function() { return colors("land")})
+		    .attr("x", 250)
+		    .attr("y", 300);
 
 	    
 	    });
@@ -226,7 +261,6 @@ LineChart6 = React.createClass({
 	function type(d) {
 	    d.year = parseInt(d.year);
 	    d.annualMean = +d.annualMean + 0.23;
-	    d.orbitalChanges = +d.orbitalChanges - 287.50310744057606;
 	    return d;
 	}
 
@@ -239,6 +273,8 @@ LineChart6 = React.createClass({
 	function type2(d) {
 	    d.year = parseInt(d.year);
 	    d.orbitalChanges = kToC(+d.landUse) - kToC(287.50310744057606);
+	    d.landUpper = env + d.orbitalChanges;
+	    d.landLower = -env + d.orbitalChanges;
 	    return d;
 	}
 

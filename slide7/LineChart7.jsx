@@ -5,6 +5,9 @@ LineChart7 = React.createClass({
 	var width = props.width;
 	var parse = d3.time.format("%b %Y").parse;
 
+	// 2 standard deviations in Celsius
+	var env = 1.96*.14;
+	
 	// Scales and axes. Note the inverted domain for the y-scale: bigger is up!
 	var x = d3.scale.linear().range([0, width]),
 	    y = d3.scale.linear().range([height, 0]),
@@ -19,6 +22,14 @@ LineChart7 = React.createClass({
 		.x(function(d) { return x(d.year); })
 		.y0(height)
 		.y1(function(d) { return y(d.annualMean); });
+	
+	var areaOzone= d3.svg.area()
+		.interpolate(interpolation)
+		.x(function(d) { return x(d.year); })
+		.y0(function(d) { return y(d.ozoneLower); })
+		.y1(function(d) { return y(d.ozoneUpper); });
+
+	var interpolation = "linear";
 
 	// A line generator, for the dark stroke.
 
@@ -105,6 +116,16 @@ LineChart7 = React.createClass({
 			      "ozone","human","land","orbital"
 			      ];
 		colors.domain(domain);
+
+		svg.append('path')
+		.attr({ "class": "area confidence"})
+		.data([values2])
+		.style('fill', function(d) {
+		    return colors("ozone");
+		})
+	        .attr('clip-path', 'url(#clip)')
+		.attr('d', areaOzone);
+
 		
 //
 		svg.selectAll('.line')
@@ -203,6 +224,8 @@ LineChart7 = React.createClass({
 
        		svg.append("text")
 		    .text("Observed Land-Ocean Temperature")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 12);
 
@@ -215,8 +238,18 @@ LineChart7 = React.createClass({
 
        		svg.append("text")
 		    .text("Influence of Ozone")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
 		    .attr("x", 25)
 		    .attr("y", 37);
+
+		svg.append("text")
+		    .text("Shaded Region Represents 95% Confidence Interval")
+		    .attr("font-family", "helvetica")
+		    .style("font-size", "11px")
+		    .style("fill", function() { return colors("ozone")})
+		    .attr("x", 250)
+		    .attr("y", 300);
 
 	    
 	    });
@@ -239,6 +272,9 @@ LineChart7 = React.createClass({
 	function type2(d) {
 	    d.year = parseInt(d.year);
 	    d.orbitalChanges = kToC(+d.ozone) - kToC(287.50310744057606);
+	    d.ozoneUpper = env + d.orbitalChanges;
+	    d.ozoneLower = - env + d.orbitalChanges;
+
 	    return d;
 	}
 

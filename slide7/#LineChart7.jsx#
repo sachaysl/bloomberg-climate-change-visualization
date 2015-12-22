@@ -1,4 +1,4 @@
-LineChart9 = React.createClass({
+LineChart7 = React.createClass({
 
     updateChart: function(props) {
 	var height = props.height;
@@ -7,8 +7,7 @@ LineChart9 = React.createClass({
 
 	// 2 standard deviations in Celsius
 	var env = 1.96*.14;
-
-
+	
 	// Scales and axes. Note the inverted domain for the y-scale: bigger is up!
 	var x = d3.scale.linear().range([0, width]),
 	    y = d3.scale.linear().range([height, 0]),
@@ -23,12 +22,12 @@ LineChart9 = React.createClass({
 		.x(function(d) { return x(d.year); })
 		.y0(height)
 		.y1(function(d) { return y(d.annualMean); });
-
-	var areaGreenhouse= d3.svg.area()
+	
+	var areaOzone= d3.svg.area()
 		.interpolate(interpolation)
 		.x(function(d) { return x(d.year); })
-		.y0(function(d) { return y(d.greenhouseLower); })
-		.y1(function(d) { return y(d.greenhouseUpper); });
+		.y0(function(d) { return y(d.ozoneLower); })
+		.y1(function(d) { return y(d.ozoneUpper); });
 
 	var interpolation = "linear";
 
@@ -119,21 +118,23 @@ LineChart9 = React.createClass({
 		colors.domain(domain);
 
 		svg.append('path')
-		 .attr({ "class": "area confidence"})
-		 .data([values2])
-		 .style('fill', function(d) {
-		    return colors("greenhouse");
-		  })
-	          .attr('clip-path', 'url(#clip)')
-		  .attr('d', areaGreenhouse);
+		.attr({ "class": "area confidence"})
+		.data([values2])
+		.style('fill', function(d) {
+		    return colors("ozone");
+		})
+	        .attr('clip-path', 'url(#clip)')
+		.attr('d', areaOzone);
 
+		
+//
 		svg.selectAll('.line')
 	        .data([values2])
 	        .enter()
 	        .append('path')
 	        .attr('class', 'line')
 	        .style('stroke', function(d) {
-		    return colors("greenhouse");
+		    return colors("ozone");
 		})
 	        .attr('clip-path', 'url(#clip)')
 	        .attr('d', function(d) {
@@ -233,10 +234,10 @@ LineChart9 = React.createClass({
 		    .attr("y", 25)
 		    .attr("width", 20)
 		    .attr("height", 20)
-		    .style("fill", function() { return colors("greenhouse")});
+		    .style("fill", function() { return colors("ozone")});
 
        		svg.append("text")
-		    .text("Influence of Greenhouse Gases")
+		    .text("Influence of Ozone")
 		    .attr("font-family", "helvetica")
 		    .style("font-size", "11px")
 		    .attr("x", 25)
@@ -246,7 +247,7 @@ LineChart9 = React.createClass({
 		    .text("Shaded Region Represents 95% Confidence Interval")
 		    .attr("font-family", "helvetica")
 		    .style("font-size", "11px")
-		    .style("fill", function() { return colors("greenhouse")})
+		    .style("fill", function() { return colors("ozone")})
 		    .attr("x", 250)
 		    .attr("y", 300);
 
@@ -258,7 +259,6 @@ LineChart9 = React.createClass({
 	function type(d) {
 	    d.year = parseInt(d.year);
 	    d.annualMean = +d.annualMean + 0.23;
-	    d.orbitalChanges = +d.orbitalChanges - 287.50310744057606;
 	    return d;
 	}
 
@@ -270,9 +270,9 @@ LineChart9 = React.createClass({
 
 	function type2(d) {
 	    d.year = parseInt(d.year);
-	    d.orbitalChanges = kToC(+d.greenhouseGases) - kToC(287.50310744057606);
-	    d.greenhouseUpper = env + d.orbitalChanges;
-	    d.greenhouseLower = - env + d.orbitalChanges;
+	    d.orbitalChanges = kToC(+d.ozone) - kToC(287.50310744057606);
+	    d.ozoneUpper = env + d.orbitalChanges;
+	    d.ozoneLower = - env + d.orbitalChanges;
 
 	    return d;
 	}

@@ -5,6 +5,10 @@ LineChart10 = React.createClass({
 	var width = props.width;
 	var parse = d3.time.format("%b %Y").parse;
 
+	// 2 standard deviations in Celsius
+	var env = 1.96*.14;
+
+
 	// Scales and axes. Note the inverted domain for the y-scale: bigger is up!
 	var x = d3.scale.linear().range([0, width]),
 	    y = d3.scale.linear().range([height, 0]),
@@ -19,7 +23,7 @@ LineChart10 = React.createClass({
 		.x(function(d) { return x(d.year); })
 		.y0(height)
 		.y1(function(d) { return y(d.annualMean); });
-
+		
 	// A line generator, for the dark stroke.
 
 	var line = d3.svg.line()
@@ -125,6 +129,7 @@ LineChart10 = React.createClass({
 			      "ozone","human","natural","orbital"
 			      ];
 		colors.domain(domain);
+
 		
 //
 		svg.selectAll('.line3')
